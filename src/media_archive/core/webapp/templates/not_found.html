@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}404 &middot; tiktok-archive{% endblock %}
+
+{% block main %}
+<section>
+  <h2>404</h2>
+  <div class="card">
+    <h3>Not Found</h3>
+    <p>That page or video does not exist.</p>
+    <a class="button-link" href="{{ url_for('home') }}">Return to Analyze</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block aside %}
+<h3>Quick Links</h3>
+<ul class="aside-list">
+  <li><a href="{{ url_for('home') }}">Analyze</a></li>
+  <li><a href="{{ url_for('creators_page') }}">Creators</a></li>
+  <li><a href="{{ url_for('queue_page') }}">Queue</a></li>
+</ul>
+{% endblock %}

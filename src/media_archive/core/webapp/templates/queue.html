@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Queue &middot; tiktok-archive{% endblock %}
+
+{% block main %}
+<section>
+  <h2>Queue</h2>
+
+  <div class="card">
+    <h3>Job State</h3>
+    <p>Auto-refreshing every 5 seconds.</p>
+    <div id="queue-summary" class="stat-grid">
+      <div class="stat-cell"><div class="stat-label">pending</div><div class="stat-value" id="stat-pending">&mdash;</div></div>
+      <div class="stat-cell"><div class="stat-label">running</div><div class="stat-value" id="stat-running">&mdash;</div></div>
+      <div class="stat-cell"><div class="stat-label">done</div><div class="stat-value" id="stat-done">&mdash;</div></div>
+      <div class="stat-cell"><div class="stat-label">failed</div><div class="stat-value" id="stat-failed">&mdash;</div></div>
+      <div class="stat-cell"><div class="stat-label">recent failures (24h)</div><div class="stat-value" id="stat-recent-failures">&mdash;</div></div>
+    </div>
+    <div id="queue-poll-progress" class="progress-bar idle">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Recent Jobs</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>kind</th>
+          <th>status</th>
+          <th>video</th>
+          <th>creator</th>
+          <th>attempts</th>
+          <th>duration</th>
+          <th>note</th>
+        </tr>
+      </thead>
+      <tbody id="queue-rows">
+        <tr><td colspan="8">Loading&hellip;</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+
+{% block aside %}
+<h3>Worker</h3>
+<p>The queue is drained by a separate worker process. If "running" stays at zero while "pending" grows, no worker is active.</p>
+<pre class="cmd">tiktok-archive worker</pre>
+<p>Or one-shot:</p>
+<pre class="cmd">tiktok-archive worker --once</pre>
+
+<h3>Job Kinds</h3>
+<ul class="aside-list">
+  <li>download &mdash; fetch + analyze</li>
+  <li>sync-creator &mdash; pull profile</li>
+  <li>tag &mdash; reserved</li>
+  <li>embed &mdash; phase 5</li>
+</ul>
+
+<h3>Status Flow</h3>
+<ul class="aside-list">
+  <li>pending &rarr; running</li>
+  <li>running &rarr; done</li>
+  <li>running &rarr; failed (retry w/ backoff)</li>
+  <li>failed permanently after 3 attempts</li>
+</ul>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  if (window.startQueuePoll) window.startQueuePoll();
+</script>
+{% endblock %}

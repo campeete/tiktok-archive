@@ -1,0 +1,14 @@
+# Core deps for tiktok-archive.
+# For a full install with all features, prefer:
+#   pip install -e ".[analyze-mac]"     # Apple Silicon
+#   pip install -e ".[analyze-cuda]"    # NVIDIA / WSL2
+# This file exists for users who want to pin only the base.
+
+sqlalchemy>=2.0
+pyyaml>=6.0
+requests>=2.31
+
+# Recommended add-ons (uncomment as needed)
+# yt-dlp>=2024.1.1
+# flask>=3.0
+# boto3>=1.34

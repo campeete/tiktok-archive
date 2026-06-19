@@ -1,0 +1,373 @@
+/* tiktok-archive — frontend per shared template
+ * black bg, white text, borders only, no colors, no external libs.
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  padding: 20px;
+  background: black;
+  color: white;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- semantic structure: every block has a border ---------- */
+header,
+nav,
+main,
+section,
+aside,
+footer {
+  border: 1px solid white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+
+nav   { width: 20%; align-self: flex-start; }
+main  { width: 60%; }
+aside { width: 20%; align-self: flex-start; }
+
+footer {
+  margin-bottom: 0;
+}
+
+/* ---------- typography ---------- */
+h1 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid white;
+}
+h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  margin-top: 8px;
+}
+p {
+  margin-bottom: 12px;
+}
+a {
+  color: white;
+  text-decoration: underline;
+}
+a:hover { opacity: 0.7; }
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+nav ul,
+.aside-list {
+  margin-bottom: 16px;
+}
+nav li,
+.aside-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid white;
+}
+nav li:last-child,
+.aside-list li:last-child {
+  border-bottom: none;
+}
+nav a.active {
+  font-weight: bold;
+}
+nav a.active::before {
+  content: "> ";
+}
+
+.version {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ---------- cards ---------- */
+.card {
+  border: 1px solid white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.card:last-child {
+  margin-bottom: 0;
+}
+.card-id {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ---------- buttons ---------- */
+button,
+.button-link {
+  padding: 10px 18px;
+  border: 1px solid white;
+  background: none;
+  color: white;
+  cursor: pointer;
+  margin-top: 12px;
+  margin-right: 12px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-block;
+}
+button:hover,
+.button-link:hover {
+  opacity: 0.7;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- inputs ---------- */
+input[type="text"],
+input[type="url"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid white;
+  margin-bottom: 12px;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+input[type="text"]:focus,
+input[type="url"]:focus {
+  outline: none;
+  border-width: 2px;
+  padding: 9px;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.file-pick {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1px solid white;
+  cursor: pointer;
+}
+.file-pick:hover { opacity: 0.7; }
+.file-pick input { display: none; }
+
+/* ---------- progress bars (CSS-only animation) ---------- */
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  border: 1px solid white;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  width: 40%;
+  background: white;
+  animation: load 2s infinite;
+}
+@keyframes load {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(150%); }
+  100% { transform: translateX(150%); }
+}
+
+/* idle progress bar: barely visible pulse */
+.progress-bar.idle .progress-fill {
+  width: 100%;
+  animation: idle-pulse 4s infinite;
+  opacity: 0.2;
+}
+@keyframes idle-pulse {
+  0%, 100% { opacity: 0.1; }
+  50%      { opacity: 0.3; }
+}
+
+.progress-bar.hidden { display: none; }
+
+/* ---------- status messages ---------- */
+.status {
+  border: 1px solid white;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.status.hidden { display: none; }
+.status.error {
+  border-style: dashed;
+}
+
+/* ---------- tags ---------- */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid white;
+  font-size: 12px;
+}
+.tag-warn {
+  border-style: dashed;
+}
+
+/* ---------- transcript / pre ---------- */
+.transcript,
+.cmd {
+  border: 1px solid white;
+  padding: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+.transcript {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ---------- bullets (key points) ---------- */
+.bullets {
+  list-style: disc inside;
+  padding-left: 12px;
+}
+.bullets li {
+  padding: 4px 0;
+  border: none;
+}
+
+/* ---------- tables ---------- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.data-table th,
+.data-table td {
+  border: 1px solid white;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.data-table th {
+  font-weight: bold;
+}
+
+/* ---------- queue stats grid ---------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.stat-cell {
+  border: 1px solid white;
+  padding: 14px;
+  text-align: center;
+}
+.stat-label {
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* ---------- Q&A thread ---------- */
+.qa-item {
+  border: 1px solid white;
+  padding: 12px;
+  margin-top: 12px;
+}
+.qa-q {
+  margin-bottom: 10px;
+}
+.qa-q::before { content: "Q: "; font-weight: bold; }
+.qa-a::before { content: "A: "; font-weight: bold; }
+.qa-pending {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* ---------- misc ---------- */
+.muted        { opacity: 0.7; }
+.muted.small  { font-size: 12px; }
+.hidden       { display: none; }
+
+#analyze-result-body p {
+  margin-bottom: 12px;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+  nav, main, aside {
+    width: 100%;
+  }
+}
+
+/* ---------- media gallery (Phase 1.7) ---------- */
+.thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.thumb {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--fg);
+  text-decoration: none;
+  color: var(--fg);
+  background: var(--bg);
+}
+.thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid var(--fg);
+}
+.thumb-caption {
+  padding: 6px 8px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.thumb:hover {
+  outline: 2px solid var(--fg);
+}

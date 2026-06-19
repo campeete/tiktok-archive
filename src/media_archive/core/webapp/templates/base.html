@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}media-archive{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>media-archive</h1>
+    <p class="version">v0.3.0 (Collections &amp; export)
+  </header>
+
+  <div class="container">
+
+    <nav>
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="{{ url_for('home') }}" {% if active_page == 'home' %}class="active"{% endif %}>Analyze</a></li>
+        <li><a href="{{ url_for('creators_page') }}" {% if active_page == 'creators' %}class="active"{% endif %}>Creators</a></li>
+        <li><a href="{{ url_for('queue_page') }}" {% if active_page == 'queue' %}class="active"{% endif %}>Queue</a></li>
+      </ul>
+
+      <h3>Reference</h3>
+      <ul>
+        <li><a href="https://github.com/campeete/media-archive" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="/api/health" target="_blank">Health Check</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      {% block main %}{% endblock %}
+    </main>
+
+    <aside>
+      {% block aside %}
+        <h3>Status</h3>
+        <p>System idle.</p>
+        <div class="progress-bar idle">
+          <div class="progress-fill"></div>
+        </div>
+      {% endblock %}
+    </aside>
+
+  </div>
+
+  <footer>
+    <p>local-first &middot; <a href="https://github.com/campeete/media-archive" target="_blank" rel="noopener">github.com/campeete/media-archive</a></p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

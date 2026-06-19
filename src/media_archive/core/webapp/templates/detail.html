@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}#{{ video.id }} &middot; tiktok-archive{% endblock %}
+
+{% block main %}
+<section>
+  <h2>@{{ video.author_handle or 'unknown' }} &mdash; #{{ video.id }}</h2>
+
+  <div class="card">
+    <h3>Importance</h3>
+    <p>
+      Status:
+      <strong id="imp-status">{{ 'IMPORTANT' if video.is_important else 'Not marked' }}</strong>
+      {% if video.important_overridden %}<span class="muted">(manual)</span>{% endif %}
+    </p>
+    {% if video.importance_reason %}
+    <p class="muted">{{ video.importance_reason }}</p>
+    {% endif %}
+    <button type="button" id="imp-toggle"
+            data-video-id="{{ video.id }}"
+            data-current="{{ 'true' if video.is_important else 'false' }}">
+      {{ 'Unmark' if video.is_important else 'Mark Important' }}
+    </button>
+  </div>
+
+  {% if video.summary %}
+  <div class="card">
+    <h3>Summary</h3>
+    <p>{{ video.summary }}</p>
+  </div>
+  {% endif %}
+
+  {% if video.key_points %}
+  <div class="card">
+    <h3>Key Points</h3>
+    <ul class="bullets">
+      {% for p in video.key_points %}<li>{{ p }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <h3>Tags</h3>
+    <div class="tag-row">
+      {% if video.intent %}<span class="tag">intent: {{ video.intent }}</span>{% endif %}
+      {% for t in video.topics %}<span class="tag">{{ t }}</span>{% endfor %}
+      {% if video.claim_check %}<span class="tag tag-warn">claim-check</span>{% endif %}
+      {% if not video.intent and not video.topics %}<span class="muted">No tags yet.</span>{% endif %}
+    </div>
+  </div>
+
+  {% set has_media = video.media.frame_thumbs or video.media.slide_thumbs or video.media.frame_fulls or video.media.slide_fulls %}
+  {% if has_media %}
+  <div class="card">
+    <h3>
+      {% if video.post_type == 'photo' %}Slides{% else %}Key Frames{% endif %}
+    </h3>
+    {% if video.media.slide_thumbs %}
+    <div class="thumb-grid">
+      {% for m in video.media.slide_thumbs %}
+        {% set full = video.media.slide_fulls | selectattr('sequence','equalto', m.sequence) | first %}
+        <a href="{{ (full or m).url }}" target="_blank" class="thumb">
+          <img src="{{ m.url }}" alt="slide {{ m.sequence + 1 }}" loading="lazy">
+          <span class="thumb-caption">slide {{ m.sequence + 1 }}{% if full %} &middot; full-res{% endif %}</span>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if video.media.frame_thumbs %}
+    <div class="thumb-grid">
+      {% for m in video.media.frame_thumbs %}
+        {% set full = video.media.frame_fulls | selectattr('sequence','equalto', m.sequence) | first %}
+        <a href="{{ (full or m).url }}" target="_blank" class="thumb">
+          <img src="{{ m.url }}" alt="frame at {{ '%.1f'|format(m.timestamp_sec or 0) }}s" loading="lazy">
+          <span class="thumb-caption">
+            {% if m.timestamp_sec is not none %}{{ '%.1f'|format(m.timestamp_sec) }}s{% else %}frame {{ m.sequence }}{% endif %}
+          </span>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if video.transcript %}
+  <div class="card">
+    <h3>Transcript</h3>
+    <pre class="transcript">{{ video.transcript }}</pre>
+  </div>
+
+  <div class="card">
+    <h3>Ask a Question</h3>
+    <p>Answers come from the transcript above. The model will say so if the answer isn't present.</p>
+    <form id="qa-form" data-video-id="{{ video.id }}">
+      <input type="text" id="qa-input" placeholder="What is this video actually claiming?" autocomplete="off">
+      <button type="submit">Ask</button>
+      <button type="button" id="qa-clear">Clear Thread</button>
+    </form>
+    <div id="qa-progress" class="progress-bar hidden">
+      <div class="progress-fill"></div>
+    </div>
+    <div id="qa-thread"></div>
+  </div>
+  {% else %}
+  <div class="card">
+    <h3>No Transcript</h3>
+    <p>This video has not been transcribed yet. The worker will pick it up if it is in the queue.</p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block aside %}
+<h3>Video Metadata</h3>
+<ul class="aside-list">
+  <li>id: #{{ video.id }}</li>
+  <li>type: {{ video.post_type }}</li>
+  {% if video.duration_sec %}<li>duration: {{ '%.1f'|format(video.duration_sec) }}s</li>{% endif %}
+  {% if video.transcript_lang %}<li>language: {{ video.transcript_lang }}</li>{% endif %}
+  {% if video.view_count %}<li>views: {{ video.view_count }}</li>{% endif %}
+  {% if video.like_count %}<li>likes: {{ video.like_count }}</li>{% endif %}
+  {% if video.transcript_only %}<li>storage: transcript-only</li>{% endif %}
+</ul>
+
+<h3>Source</h3>
+<p><a href="{{ video.url }}" target="_blank" rel="noopener">Original on TikTok</a></p>
+<p><a href="{{ url_for('home') }}">&laquo; Back to Analyze</a></p>
+
+<h3>Pipeline State</h3>
+<ul class="aside-list">
+  <li>{% if video.transcribed %}[x]{% else %}[ ]{% endif %} Transcribed</li>
+  <li>{% if video.tagged %}[x]{% else %}[ ]{% endif %} Tagged</li>
+  <li>{% if video.is_important %}[x]{% else %}[ ]{% endif %} Important</li>
+</ul>
+{% endblock %}

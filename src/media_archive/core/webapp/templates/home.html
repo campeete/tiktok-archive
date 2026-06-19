@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Analyze &middot; tiktok-archive{% endblock %}
+
+{% block main %}
+<section>
+  <h2>Analyze</h2>
+
+  <div class="card">
+    <h3>New Video</h3>
+    <p>Paste a TikTok URL or upload a local file. The pipeline returns a transcript, a summary, and tags in one pass.</p>
+
+    <form id="analyze-form">
+      <input
+        type="url"
+        id="analyze-url"
+        name="url"
+        placeholder="https://www.tiktok.com/@user/video/..."
+        autocomplete="off"
+        spellcheck="false"
+      >
+
+      <div class="file-row">
+        <label class="file-pick">
+          <input type="file" id="analyze-file" accept="video/*,audio/*">
+          <span>Choose Local File</span>
+        </label>
+        <span id="file-label"></span>
+      </div>
+
+      <button type="submit" id="analyze-submit">Run Analysis</button>
+      <button type="reset" id="analyze-reset">Clear</button>
+    </form>
+
+    <div id="analyze-progress" class="progress-bar hidden">
+      <div class="progress-fill"></div>
+    </div>
+    <p id="analyze-status" class="status hidden"></p>
+  </div>
+
+  <div id="analyze-result" class="card hidden">
+    <h3>Result</h3>
+    <div id="analyze-result-body"></div>
+  </div>
+</section>
+
+<section>
+  <h2>Recent</h2>
+  {% if recent %}
+    {% for v in recent %}
+      <div class="card">
+        <h3>@{{ v.author_handle or 'unknown' }} <span class="card-id">#{{ v.id }}</span></h3>
+        <p>{{ v.summary or 'No summary yet.' }}</p>
+        <div class="tag-row">
+          {% if v.intent %}<span class="tag">intent: {{ v.intent }}</span>{% endif %}
+          {% for t in v.topics[:4] %}
+            <span class="tag">{{ t }}</span>
+          {% endfor %}
+          {% if v.claim_check %}<span class="tag tag-warn">claim-check</span>{% endif %}
+          {% if v.transcript_only %}<span class="tag">transcript-only</span>{% endif %}
+        </div>
+        <a class="button-link" href="{{ url_for('detail', video_id=v.id) }}">View Details</a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="card">
+      <h3>No Videos Yet</h3>
+      <p>Paste a URL above to analyze your first video.</p>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block aside %}
+<h3>Status</h3>
+<p id="aside-status-text">Idle. Submit a video to begin.</p>
+<div id="aside-progress" class="progress-bar idle">
+  <div class="progress-fill"></div>
+</div>
+
+<h3>Recent Count</h3>
+<p>{{ recent|length }} on this page</p>
+
+<h3>Pipeline</h3>
+<ul class="aside-list">
+  <li>1. Download</li>
+  <li>2. Transcribe</li>
+  <li>3. Discard mp4</li>
+  <li>4. Tag</li>
+  <li>5. Persist</li>
+</ul>
+{% endblock %}

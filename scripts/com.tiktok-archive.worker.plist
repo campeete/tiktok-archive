@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Drop this file into ~/Library/LaunchAgents/ to run the worker continuously
+  on macOS, and load it with:
+    launchctl load ~/Library/LaunchAgents/com.tiktok-archive.worker.plist
+
+  IMPORTANT: replace EVERY occurrence of /Users/cameronpeete/Documents/tiktok-archive
+  with your actual project path before installing.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.tiktok-archive.worker</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/cameronpeete/Documents/tiktok-archive/venv/bin/tiktok-archive</string>
+        <string>worker</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/cameronpeete/Documents/tiktok-archive</string>
+
+    <!-- Restart on crash; back off if it crashes immediately -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <!-- Run as the logged-in user, not root -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <!-- Logs -->
+    <key>StandardOutPath</key>
+    <string>/Users/cameronpeete/Documents/tiktok-archive/data/logs/worker.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/cameronpeete/Documents/tiktok-archive/data/logs/worker.err.log</string>
+</dict>
+</plist>

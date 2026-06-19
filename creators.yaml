@@ -1,0 +1,23 @@
+# tiktok-archive creators list.
+#
+# This file is the source of truth for which creators get periodic sync.
+# Populate it by either:
+#   (a) editing this file directly with handles you care about, then:
+#         tiktok-archive creator import-from-yaml
+#   (b) once your TikTok data export arrives:
+#         tiktok-archive creator import-from-export ~/Downloads/tiktok-export.zip
+#         tiktok-archive creator export-to-yaml   # snapshots back to this file
+#
+# Schema:
+#   creators:
+#     - handle: someuser            # required, no @ prefix
+#       display_name: Some User     # optional
+#       sync_depth: last-6mo        # full | last-6mo | last-50  (optional)
+#       notes: cybersecurity        # optional
+#       enabled: true               # default true (optional)
+#       important: false            # default false. When true, every video
+#                                   # from this creator gets full-res
+#                                   # frame extraction (not just thumbs).
+#                                   # Use sparingly — disk grows fast.
+
+creators: []

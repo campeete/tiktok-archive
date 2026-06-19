@@ -1,0 +1,110 @@
+# tiktok-archive controlled vocabulary
+# Copy to tags_vocabulary.yaml to edit. The LLM is constrained to choose topics
+# from this list; it cannot invent new ones. Trim/add to suit your archive.
+
+intents:
+  - educate
+  - entertain
+  - promote
+  - inform
+  - persuade
+  - vent
+  - other
+
+topics:
+  # tech / security
+  - slug: ai
+    label: AI / ML
+    category: tech
+  - slug: cybersecurity
+    label: Cybersecurity
+    category: tech
+  - slug: hardware-security
+    label: Hardware Security
+    category: tech
+  - slug: programming
+    label: Programming
+    category: tech
+  - slug: hacking
+    label: Hacking / red team
+    category: tech
+  - slug: privacy
+    label: Privacy
+    category: tech
+  - slug: cryptocurrency
+    label: Cryptocurrency
+    category: tech
+  - slug: networking
+    label: Networking
+    category: tech
+  - slug: linux
+    label: Linux / OS
+    category: tech
+  - slug: hardware
+    label: Hardware / DIY
+    category: tech
+
+  # business / finance
+  - slug: business
+    label: Business
+    category: finance
+  - slug: investing
+    label: Investing
+    category: finance
+  - slug: career
+    label: Career
+    category: finance
+  - slug: economics
+    label: Economics
+    category: finance
+
+  # life / hobbies
+  - slug: cooking
+    label: Cooking
+    category: life
+  - slug: fitness
+    label: Fitness
+    category: life
+  - slug: travel
+    label: Travel
+    category: life
+  - slug: gaming
+    label: Gaming
+    category: life
+  - slug: music
+    label: Music
+    category: life
+  - slug: art
+    label: Art / Design
+    category: life
+
+  # information
+  - slug: news
+    label: News
+    category: info
+  - slug: politics
+    label: Politics
+    category: info
+  - slug: science
+    label: Science
+    category: info
+  - slug: history
+    label: History
+    category: info
+  - slug: education
+    label: Education
+    category: info
+
+  # social
+  - slug: comedy
+    label: Comedy
+    category: social
+  - slug: storytime
+    label: Storytime
+    category: social
+  - slug: relationships
+    label: Relationships
+    category: social
+  - slug: lifestyle
+    label: Lifestyle
+    category: social
